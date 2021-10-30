@@ -23,11 +23,19 @@ async function run() {
     await client.connect();
     const database = client.db("dreamyTour");
     const packegeCollection = database.collection("tourPackeges");
-
+    //Get API from DB
     app.get("/tourPackeges", async (req, res) => {
       const cursor = packegeCollection.find({});
       const packeges = await cursor.toArray();
       res.send(packeges);
+    });
+
+    //Post API to DB
+    app.post("/tourPackeges", async (req, res) => {
+      const packege = req.body;
+      const result = await packegeCollection.insertOne(packege);
+      res.send(result);
+      console.log(packege);
     });
   } finally {
     // await client.close();
