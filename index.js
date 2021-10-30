@@ -68,7 +68,6 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await bookedPackageCollection.deleteOne(query);
       res.send(result);
-      console.log(result);
     });
   } finally {
     // await client.close();
