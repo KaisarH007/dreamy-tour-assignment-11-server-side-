@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
@@ -23,6 +24,7 @@ async function run() {
     await client.connect();
     const database = client.db("dreamyTour");
     const packegeCollection = database.collection("tourPackeges");
+    const bookedPackageCollection = database.collection("bookedPackage");
     //Get API from DB
     app.get("/tourPackeges", async (req, res) => {
       const cursor = packegeCollection.find({});
@@ -30,12 +32,27 @@ async function run() {
       res.send(packeges);
     });
 
-    //Post API to DB
+    //Post New Package  to DB
     app.post("/tourPackeges", async (req, res) => {
       const packege = req.body;
       const result = await packegeCollection.insertOne(packege);
       res.send(result);
       console.log(packege);
+    });
+
+    //Get package details API
+    app.get("/packageDetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await packegeCollection.findOne(query);
+      res.send(result);
+    });
+
+    //Post orderd Package to DB
+    app.post("/bookedPackage", async (req, res) => {
+      const bookedPackage = req.body;
+      const result = await bookedPackageCollection.insertOne(bookedPackage);
+      res.send(result);
     });
   } finally {
     // await client.close();
