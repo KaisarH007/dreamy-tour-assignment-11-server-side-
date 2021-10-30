@@ -61,6 +61,15 @@ async function run() {
       // console.log(bookedPackages);
       res.send(bookedPackages);
     });
+
+    //Delete Booked Orders from Bookedpackage
+    app.delete("/bookedPackages/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await bookedPackageCollection.deleteOne(query);
+      res.send(result);
+      console.log(result);
+    });
   } finally {
     // await client.close();
   }
