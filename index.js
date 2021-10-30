@@ -54,6 +54,13 @@ async function run() {
       const result = await bookedPackageCollection.insertOne(bookedPackage);
       res.send(result);
     });
+    //Get orderd Package from DB
+    app.get("/bookedPackages", async (req, res) => {
+      const cursor = bookedPackageCollection.find({});
+      const bookedPackages = await cursor.toArray();
+      // console.log(bookedPackages);
+      res.send(bookedPackages);
+    });
   } finally {
     // await client.close();
   }
